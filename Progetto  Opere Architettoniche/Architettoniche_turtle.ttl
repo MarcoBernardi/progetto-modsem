@@ -1,0 +1,655 @@
+@prefix : <http://www.semanticweb.org/bernardi/progetto2021/architettoniche#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix architettoniche: <http://www.semanticweb.org/bernardi/progetto2021/architettoniche> .
+@base <http://www.semanticweb.org/bernardi/progetto2021/architettoniche> .
+
+<http://www.semanticweb.org/bernardi/progetto2021/architettoniche> rdf:type owl:Ontology ;
+                                                                    owl:imports <http://www.ontologydesignpatterns.org/cp/owl/agentrole.owl> .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://www.w3.org/2002/07/owl#equivalentClass
+owl:equivalentClass rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#architettoNatoIn
+:architettoNatoIn rdf:type owl:ObjectProperty ;
+                  owl:inverseOf :nazioneHaArchitetti ;
+                  rdfs:domain :Architetto ;
+                  rdfs:range :Nazione ;
+                  rdfs:comment "Specifica in quale nazione è nato un architetto" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#cittaHaOpera
+:cittaHaOpera rdf:type owl:ObjectProperty ;
+              owl:inverseOf :operaSituataInCitta ;
+              rdfs:domain :Citta ;
+              rdfs:range :Opera ;
+              rdfs:comment "Specifica quali opere si trovano in una città" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#cittaSituataInNazione
+:cittaSituataInNazione rdf:type owl:ObjectProperty ;
+                       rdfs:domain :Citta ;
+                       rdfs:range :Nazione ;
+                       rdfs:comment "Specifica in quale nazione si trova una città" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#eRuoloDi
+:eRuoloDi rdf:type owl:ObjectProperty ;
+          owl:inverseOf :haRuolo .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#epocaHaOpera
+:epocaHaOpera rdf:type owl:ObjectProperty ;
+              owl:inverseOf :inEpoca .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#haProgettato
+:haProgettato rdf:type owl:ObjectProperty ;
+              owl:inverseOf :progettatoDa ;
+              rdfs:domain :Architetto ;
+              rdfs:range :Opera ;
+              rdfs:comment "Spoecifica quale opera ha progettato un architetto" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#haRuolo
+:haRuolo rdf:type owl:ObjectProperty ;
+         rdfs:domain <http://www.ontologydesignpatterns.org/cp/owl/agentrole.owl#Agent> ;
+         rdfs:range <http://www.ontologydesignpatterns.org/cp/owl/objectrole.owl#Role> .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#haStile
+:haStile rdf:type owl:ObjectProperty ;
+         owl:inverseOf :stileHaOpera ;
+         rdfs:domain :Opera ;
+         rdfs:range :Stile_Architettonico ;
+         rdfs:comment "Specifica quale stile architettonico è attribuito ad un'opera" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#inEpoca
+:inEpoca rdf:type owl:ObjectProperty ;
+         rdfs:domain :Opera ;
+         rdfs:range :Epoca ;
+         rdfs:comment "Specifica in quale epoca è stata aperta un'opera" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#nazioneHaArchitetti
+:nazioneHaArchitetti rdf:type owl:ObjectProperty ;
+                     rdfs:domain :Nazione ;
+                     rdfs:range :Architetto ;
+                     rdfs:comment "Specifica quali architretti si trovano in una città" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#nazioneHaOpera
+:nazioneHaOpera rdf:type owl:ObjectProperty ;
+                owl:inverseOf :operaSituataInNazione ;
+                rdfs:domain :Nazione ;
+                rdfs:range :Opera ;
+                rdfs:comment "Specifica quali opere si trovano in una nazione" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#operaSituataInCitta
+:operaSituataInCitta rdf:type owl:ObjectProperty ;
+                     rdfs:subPropertyOf owl:topObjectProperty ;
+                     rdfs:domain :Opera ;
+                     rdfs:range :Citta ;
+                     rdfs:comment "Specifica in quale città è situata un'opera" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#operaSituataInNazione
+:operaSituataInNazione rdf:type owl:ObjectProperty ,
+                                owl:TransitiveProperty ;
+                       rdfs:domain :Opera ;
+                       rdfs:range :Nazione ;
+                       owl:propertyChainAxiom ( :operaSituataInCitta
+                                                :cittaSituataInNazione
+                                              ) ;
+                       rdfs:comment "Specifica in quale nazione è situata un'opera" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#possedutoDa
+:possedutoDa rdf:type owl:ObjectProperty ;
+             owl:inverseOf :possiede ;
+             rdf:type owl:FunctionalProperty ;
+             rdfs:domain :Opera ;
+             rdfs:range :Proprietario ;
+             rdfs:comment "Sepecfica la proprietà di un'opera" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#possiede
+:possiede rdf:type owl:ObjectProperty ;
+          rdfs:domain :Proprietario ;
+          rdfs:range :Opera ;
+          rdfs:comment "Specifica quale opera possiede un proprietario" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#progettatoDa
+:progettatoDa rdf:type owl:ObjectProperty ;
+              rdfs:domain :Opera ;
+              rdfs:range :Architetto ;
+              rdfs:comment "Specifica l'architetto che ha progettato un'opera" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#proprietarioNatoIn
+:proprietarioNatoIn rdf:type owl:ObjectProperty ;
+                    rdfs:domain :Proprietario ;
+                    rdfs:range :Nazione ;
+                    rdfs:comment "Specifica in quale nazione è nato un propritario" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#stileHaOpera
+:stileHaOpera rdf:type owl:ObjectProperty ;
+              rdfs:domain :Stile_Architettonico ;
+              rdfs:range :Opera ;
+              rdfs:comment "Specifica le opere appartenute ad uno stile architettonico" .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#altezzaMetri
+:altezzaMetri rdf:type owl:DatatypeProperty ;
+              rdfs:domain :Opera ;
+              rdfs:range xsd:float .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#annoApertura
+:annoApertura rdf:type owl:DatatypeProperty ;
+              rdfs:domain :Opera ;
+              rdfs:range xsd:integer .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#areaMetriQuadrati
+:areaMetriQuadrati rdf:type owl:DatatypeProperty ;
+                   rdfs:domain :Opera ;
+                   rdfs:range xsd:float .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#haNome
+:haNome rdf:type owl:DatatypeProperty ;
+        rdfs:domain :Architetto ;
+        rdfs:range xsd:string .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.ontologydesignpatterns.org/cp/owl/objectrole.owl#Role
+<http://www.ontologydesignpatterns.org/cp/owl/objectrole.owl#Role> owl:equivalentClass [ rdf:type owl:Class ;
+                                                                                         owl:oneOf ( :Architetto
+                                                                                                     :Proprietario
+                                                                                                   )
+                                                                                       ] .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Architetto
+:Architetto rdf:type owl:Class ;
+            owl:equivalentClass [ rdf:type owl:Restriction ;
+                                  owl:onProperty :haProgettato ;
+                                  owl:someValuesFrom :Opera
+                                ] ;
+            rdfs:subClassOf :Persona .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Cattedrale
+:Cattedrale rdf:type owl:Class ;
+            rdfs:subClassOf :Opera ;
+            rdfs:comment "Identifica un'opera di tipo cattedrale"^^xsd:string .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Centro_Culturale
+:Centro_Culturale rdf:type owl:Class ;
+                  rdfs:subClassOf :Opera ;
+                  rdfs:comment "Identifica un'opera di tipo centro culturale"^^xsd:string .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Citta
+:Citta rdf:type owl:Class ;
+       rdfs:comment "Identifica una città"^^xsd:string .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Citta_Fortemente_Architettonica
+:Citta_Fortemente_Architettonica rdf:type owl:Class ;
+                                 owl:equivalentClass [ rdf:type owl:Restriction ;
+                                                       owl:onProperty :cittaHaOpera ;
+                                                       owl:minQualifiedCardinality "3"^^xsd:nonNegativeInteger ;
+                                                       owl:onClass :Opera
+                                                     ] ;
+                                 rdfs:subClassOf :Citta ;
+                                 rdfs:comment "Identifica una città con almeno 3 opere"^^xsd:string .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Epoca
+:Epoca rdf:type owl:Class ;
+       owl:equivalentClass [ rdf:type owl:Class ;
+                             owl:oneOf ( <http://www.semanticweb.org/bernardi/progetto2021/architettoniche#1500>
+                                         <http://www.semanticweb.org/bernardi/progetto2021/architettoniche#1600>
+                                         <http://www.semanticweb.org/bernardi/progetto2021/architettoniche#1700>
+                                         <http://www.semanticweb.org/bernardi/progetto2021/architettoniche#1800>
+                                         <http://www.semanticweb.org/bernardi/progetto2021/architettoniche#1900>
+                                         <http://www.semanticweb.org/bernardi/progetto2021/architettoniche#2000>
+                                       )
+                           ] ;
+       rdfs:comment "Identifica l'epoca di apertura di un'opera"^^xsd:string .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Grattacielo
+:Grattacielo rdf:type owl:Class ;
+             owl:equivalentClass [ rdf:type owl:Restriction ;
+                                   owl:onProperty :altezzaMetri ;
+                                   owl:someValuesFrom [ rdf:type rdfs:Datatype ;
+                                                        owl:onDatatype xsd:float ;
+                                                        owl:withRestrictions ( [ xsd:minExclusive "150.0"^^xsd:float
+                                                                               ]
+                                                                             )
+                                                      ]
+                                 ] ;
+             rdfs:subClassOf :Opera ;
+             rdfs:comment "Identifica un'opera di tipo grattacielo"^^xsd:string ;
+             owl:equivalentClass "https://www.wikidata.org/wiki/Q11303" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Museo
+:Museo rdf:type owl:Class ;
+       rdfs:subClassOf :Centro_Culturale ;
+       rdfs:comment "Identifica un'opera centro culturale di tipo museo"^^xsd:string .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Nazione
+:Nazione rdf:type owl:Class ;
+         rdfs:comment "Identifica una nazione"^^xsd:string .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Opera
+:Opera rdf:type owl:Class ;
+       rdfs:comment "Identifica un'opera"^^xsd:string .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Opera_Grande
+:Opera_Grande rdf:type owl:Class ;
+              owl:equivalentClass [ rdf:type owl:Restriction ;
+                                    owl:onProperty :areaMetriQuadrati ;
+                                    owl:someValuesFrom [ rdf:type rdfs:Datatype ;
+                                                         owl:onDatatype xsd:float ;
+                                                         owl:withRestrictions ( [ xsd:minInclusive "50000.0"^^xsd:float
+                                                                                ]
+                                                                              )
+                                                       ]
+                                  ] ;
+              rdfs:subClassOf :Opera ;
+              owl:disjointWith :Opera_Piccola ;
+              rdfs:comment "Identifica un'opera con un'area di almeno 50'000 metri quadrati"^^xsd:string .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Opera_Media
+:Opera_Media rdf:type owl:Class ;
+             owl:equivalentClass [ rdf:type owl:Restriction ;
+                                   owl:onProperty :areaMetriQuadrati ;
+                                   owl:someValuesFrom [ rdf:type rdfs:Datatype ;
+                                                        owl:onDatatype xsd:float ;
+                                                        owl:withRestrictions ( [ xsd:minExclusive "10000.0"^^xsd:float
+                                                                               ]
+                                                                               [ xsd:maxExclusive "50000.0"^^xsd:float
+                                                                               ]
+                                                                             )
+                                                      ]
+                                 ] ;
+             rdfs:subClassOf :Opera ;
+             rdfs:comment "Identifica un'opera con un'area compresa tra 10'000 e 50'000 metri quadrati"^^xsd:string .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Opera_Piccola
+:Opera_Piccola rdf:type owl:Class ;
+               owl:equivalentClass [ rdf:type owl:Restriction ;
+                                     owl:onProperty :areaMetriQuadrati ;
+                                     owl:someValuesFrom [ rdf:type rdfs:Datatype ;
+                                                          owl:onDatatype xsd:float ;
+                                                          owl:withRestrictions ( [ xsd:maxInclusive "10000.0"^^xsd:float
+                                                                                 ]
+                                                                               )
+                                                        ]
+                                   ] ;
+               rdfs:subClassOf :Opera ;
+               rdfs:comment "Identifica un'opera con un'area fino a 10'000 metri quadrati"^^xsd:string .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Opera_Storica
+:Opera_Storica rdf:type owl:Class ;
+               owl:equivalentClass [ rdf:type owl:Restriction ;
+                                     owl:onProperty :annoApertura ;
+                                     owl:someValuesFrom [ rdf:type rdfs:Datatype ;
+                                                          owl:onDatatype xsd:integer ;
+                                                          owl:withRestrictions ( [ xsd:maxExclusive 1900
+                                                                                 ]
+                                                                               )
+                                                        ]
+                                   ] ;
+               rdfs:subClassOf :Opera ;
+               rdfs:comment "Identifica un'opera aperta prima del 1900"^^xsd:string .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Persona
+:Persona rdf:type owl:Class ;
+         owl:equivalentClass <http://xmlns.com/foaf/0.1/Person> ;
+         rdfs:comment "Identifica una persona"^^xsd:string .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Proprietario
+:Proprietario rdf:type owl:Class ;
+              owl:equivalentClass [ rdf:type owl:Restriction ;
+                                    owl:onProperty :possiede ;
+                                    owl:someValuesFrom :Opera
+                                  ] .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Stile_Architettonico
+:Stile_Architettonico rdf:type owl:Class ;
+                      rdfs:comment "Identifica lo stile architettonico di un'opera"^^xsd:string .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Teatro
+:Teatro rdf:type owl:Class ;
+        rdfs:subClassOf :Centro_Culturale ;
+        rdfs:comment "Identifica un'opera centro culturale di tipo teatro"^^xsd:string .
+
+
+###  http://xmlns.com/foaf/0.1/Person
+<http://xmlns.com/foaf/0.1/Person> rdf:type owl:Class ;
+                                   rdfs:comment "Allieneamento con foaf:Person tramite equivalentTo"^^xsd:string .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Architetto
+:Architetto rdf:type owl:NamedIndividual .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Barocco_Inglese
+:Barocco_Inglese rdf:type owl:NamedIndividual ;
+                 rdfs:comment "Stile architettonico attribuito ad un'opera" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Brighton
+:Brighton rdf:type owl:NamedIndividual ;
+          :cittaSituataInNazione :Inghilterra ;
+          rdfs:comment "Nome atribuito ad una città" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#British_Museum
+:British_Museum rdf:type owl:NamedIndividual ,
+                         :Museo ,
+                         :Opera ;
+                :haStile :Revival_Greco ;
+                :inEpoca <http://www.semanticweb.org/bernardi/progetto2021/architettoniche#1700> ;
+                :operaSituataInCitta :Londra ;
+                :annoApertura 1753 ;
+                :areaMetriQuadrati "75000.0"^^xsd:float ;
+                rdfs:comment "Nome attribuito ad un'opera" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Cattedrale_Di_St_Paul
+:Cattedrale_Di_St_Paul rdf:type owl:NamedIndividual ,
+                                :Cattedrale ,
+                                :Opera ;
+                       :haStile :Barocco_Inglese ;
+                       :inEpoca <http://www.semanticweb.org/bernardi/progetto2021/architettoniche#1700> ;
+                       :operaSituataInCitta :Londra ;
+                       :annoApertura 1710 ;
+                       :areaMetriQuadrati "7230.0"^^xsd:float ;
+                       rdfs:comment "Nome attribuito ad un'opera" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Doha
+:Doha rdf:type owl:NamedIndividual ;
+      :cittaSituataInNazione :Qatar ;
+      rdfs:comment "Nome atribuito ad una città" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Francia
+:Francia rdf:type owl:NamedIndividual ;
+         rdfs:comment "Nome atribuito ad una nazione" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Giorgio_IV
+:Giorgio_IV rdf:type owl:NamedIndividual ,
+                     :Persona ;
+            :haRuolo :Proprietario ;
+            :proprietarioNatoIn :Inghilterra ;
+            rdfs:comment "Proprietario dell'opera Royal Pavillon" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Globe_Theatre
+:Globe_Theatre rdf:type owl:NamedIndividual ,
+                        :Opera ,
+                        :Teatro ;
+               :haStile :Teatro_Elisabettiano ;
+               :inEpoca <http://www.semanticweb.org/bernardi/progetto2021/architettoniche#1500> ;
+               :operaSituataInCitta :Londra ;
+               :annoApertura 1599 ;
+               :areaMetriQuadrati "3500.0"^^xsd:float ;
+               rdfs:comment "Nome attribuito ad un'opera" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Inghilterra
+:Inghilterra rdf:type owl:NamedIndividual ;
+             rdfs:comment "Nome atribuito ad una nazione" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Italia
+:Italia rdf:type owl:NamedIndividual ;
+        rdfs:comment "Nome atribuito ad una nazione" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#James_Burbage
+:James_Burbage rdf:type owl:NamedIndividual ,
+                        :Persona ;
+               :architettoNatoIn :Inghilterra ;
+               :haProgettato :Globe_Theatre ;
+               :haRuolo :Architetto ;
+               rdfs:comment "Architetto" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Jean_Nouvel
+:Jean_Nouvel rdf:type owl:NamedIndividual ,
+                      :Persona ;
+             :architettoNatoIn :Francia ;
+             :haProgettato :Museo_Nazionale_Del_Qatar ;
+             :haRuolo :Architetto ;
+             rdfs:comment "Architetto" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#John_Nash
+:John_Nash rdf:type owl:NamedIndividual ,
+                    :Persona ;
+           :architettoNatoIn :Inghilterra ;
+           :haProgettato :Royal_Pavillon ;
+           :haRuolo :Architetto ;
+           rdfs:comment "Architetto" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Londra
+:Londra rdf:type owl:NamedIndividual ;
+        :cittaSituataInNazione :Inghilterra ;
+        rdfs:comment "Nome atribuito ad una città" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Museo_Nazionale_Del_Qatar
+:Museo_Nazionale_Del_Qatar rdf:type owl:NamedIndividual ,
+                                    :Museo ,
+                                    :Opera ;
+                           :inEpoca <http://www.semanticweb.org/bernardi/progetto2021/architettoniche#2000> ;
+                           :operaSituataInCitta :Doha ;
+                           :possedutoDa :Qatar ;
+                           :annoApertura 2019 ;
+                           :areaMetriQuadrati "40000.0"^^xsd:float ;
+                           rdfs:comment "Nome attribuito ad un'opera" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Neo_Futurismo
+:Neo_Futurismo rdf:type owl:NamedIndividual ;
+               rdfs:comment "Stile architettonico attribuito ad un'opera" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Proprietario
+:Proprietario rdf:type owl:NamedIndividual .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Qatar
+:Qatar rdf:type owl:NamedIndividual ;
+       :haRuolo :Proprietario ;
+       rdfs:comment "Nome attribuito ad una nazione e ad un proprietario di un'opera" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Renzo_Piano
+:Renzo_Piano rdf:type owl:NamedIndividual ,
+                      :Persona ;
+             :architettoNatoIn :Italia ;
+             :haProgettato :The_Shard ;
+             :haRuolo :Architetto ;
+             :haNome "Renzo Piano" ;
+             rdfs:comment "Architetto" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Revival_Greco
+:Revival_Greco rdf:type owl:NamedIndividual ;
+               rdfs:comment "Stile architettonico attribuito ad un'opera" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Revival_Indo_Saracenico
+:Revival_Indo_Saracenico rdf:type owl:NamedIndividual ;
+                         rdfs:comment "Stile architettonico attribuito ad un'opera" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Robert_Smirkle
+:Robert_Smirkle rdf:type owl:NamedIndividual ,
+                         :Persona ;
+                :architettoNatoIn :Inghilterra ;
+                :haProgettato :British_Museum ;
+                :haRuolo :Architetto ;
+                rdfs:comment "Architetto" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Royal_Pavillon
+:Royal_Pavillon rdf:type owl:NamedIndividual ,
+                         :Opera ;
+                :haStile :Revival_Indo_Saracenico ;
+                :inEpoca <http://www.semanticweb.org/bernardi/progetto2021/architettoniche#1800> ;
+                :operaSituataInCitta :Brighton ;
+                :possedutoDa :Giorgio_IV ;
+                :annoApertura 1823 ;
+                :areaMetriQuadrati "26350.0"^^xsd:float ;
+                rdfs:comment "Nome attribuito ad un'opera" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Sir_Christopher_Wren
+:Sir_Christopher_Wren rdf:type owl:NamedIndividual ,
+                               :Persona ;
+                      :architettoNatoIn :Inghilterra ;
+                      :haProgettato :Cattedrale_Di_St_Paul ;
+                      :haRuolo :Architetto ;
+                      rdfs:comment "Architetto" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#Teatro_Elisabettiano
+:Teatro_Elisabettiano rdf:type owl:NamedIndividual ;
+                      rdfs:comment "Stile architettonico attribuito ad un'opera" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#The_Shard
+:The_Shard rdf:type owl:NamedIndividual ,
+                    :Opera ;
+           :haStile :Neo_Futurismo ;
+           :inEpoca <http://www.semanticweb.org/bernardi/progetto2021/architettoniche#2000> ;
+           :operaSituataInCitta :Londra ;
+           :possedutoDa :Qatar ;
+           :altezzaMetri "309.6"^^xsd:float ;
+           :annoApertura 2013 ;
+           :areaMetriQuadrati "111000.0"^^xsd:float ;
+           rdfs:comment "Nome attibuito ad un'opera" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#1500
+<http://www.semanticweb.org/bernardi/progetto2021/architettoniche#1500> rdf:type owl:NamedIndividual ;
+                                                                        rdfs:comment "Epoca storica dal 1500 al 1600" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#1600
+<http://www.semanticweb.org/bernardi/progetto2021/architettoniche#1600> rdf:type owl:NamedIndividual ;
+                                                                        rdfs:comment "Epoca storica dal 1600 al 1700" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#1700
+<http://www.semanticweb.org/bernardi/progetto2021/architettoniche#1700> rdf:type owl:NamedIndividual ;
+                                                                        rdfs:comment "Epoca storica dal 1700 al 1800" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#1800
+<http://www.semanticweb.org/bernardi/progetto2021/architettoniche#1800> rdf:type owl:NamedIndividual ;
+                                                                        rdfs:comment "Epoca storica dal 1800 al 1900" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#1900
+<http://www.semanticweb.org/bernardi/progetto2021/architettoniche#1900> rdf:type owl:NamedIndividual ;
+                                                                        rdfs:comment "Epoca storica dal 1900 al 2000" .
+
+
+###  http://www.semanticweb.org/bernardi/progetto2021/architettoniche#2000
+<http://www.semanticweb.org/bernardi/progetto2021/architettoniche#2000> rdf:type owl:NamedIndividual ;
+                                                                        rdfs:comment "Epoca storica dal 2000 in avanti" .
+
+
+#################################################################
+#    Annotations
+#################################################################
+
+:Architetto rdfs:comment "Identifica il progettista di un'opera"^^xsd:string .
+
+
+:Proprietario rdfs:comment "Idntifica il proprietario di un'opera"^^xsd:string .
+
+
+<https://www.wikidata.org/wiki/Q11303> rdfs:comment "Allineamento con Skyscraper da Wikidata"^^xsd:string .
+
+
+#################################################################
+#    General axioms
+#################################################################
+
+[ rdf:type owl:AllDifferent ;
+  owl:distinctMembers ( :British_Museum
+                        :Cattedrale_Di_St_Paul
+                        :Globe_Theatre
+                        :Museo_Nazionale_Del_Qatar
+                        :Royal_Pavillon
+                        :The_Shard
+                      )
+] .
+
+
+[ rdf:type owl:AllDifferent ;
+  owl:distinctMembers ( <http://www.semanticweb.org/bernardi/progetto2021/architettoniche#1500>
+                        <http://www.semanticweb.org/bernardi/progetto2021/architettoniche#1600>
+                        <http://www.semanticweb.org/bernardi/progetto2021/architettoniche#1700>
+                        <http://www.semanticweb.org/bernardi/progetto2021/architettoniche#1800>
+                        <http://www.semanticweb.org/bernardi/progetto2021/architettoniche#1900>
+                        <http://www.semanticweb.org/bernardi/progetto2021/architettoniche#2000>
+                      )
+] .
+
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi
